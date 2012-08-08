@@ -1,0 +1,199 @@
+<!doctype html>
+
+<html lang=en">
+<head>
+  <title>Jenkins Dashboard</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link href="https://d17tffe05zdvwj.cloudfront.net/static/fonts.css" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'nta', Helvetica Neue, Arial, sans-serif;
+      padding: 0;
+      margin: 0;
+    }
+    /*** Typographic Resets ***/
+    h1, h2, h3, h4, h5, p, th, td {
+      padding: 0;
+      margin: 0;
+      font-size: 1em;
+    }
+    /*** Header ***/
+    header {
+      background-color: #303030;
+      -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      -moz-box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      height: 1.9em;
+      padding: 0.4em 0;
+    }
+    header h1 {
+      padding: 0 16px;
+      margin: 0;
+      font-size: 24px;
+      font-weight: normal;
+      color: #fff;
+    }
+    /*** Content ***/
+    .content {
+      padding: 16px;
+    }
+    /*** Content > Alert ***/
+    .alert {
+      position: relative;
+      background: #b10e1e;
+      color: #fff;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .alert .status {
+      text-align: left;
+      padding: 0 8px;
+      text-transform: uppercase;
+      font-size: 1.4em;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    .alert .project-names {
+      padding: .2em 0;
+      margin: 0;
+      font-size: 4.5em;
+      text-align: center;
+    }
+    /*** Project Info ***/
+    .column {
+      width: 25%;
+      float: left;
+    }
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      width: 95%;
+    }
+    .column:first-child {
+    }
+    th, td {
+      vertical-align: top;
+      line-height: 1.3em;
+      padding: 0.5em 0.3em 0.5em 1em;
+    }
+    tr:nth-child(even) td {
+      background-color: #fff;
+    }
+    td {
+      background: #fafafa;
+      border: dotted 1px #bbb;
+    }
+    th {
+      line-height: 1.25em;
+      text-align: left;
+      color: #000;
+      font-weight: normal;
+      background-color: #e1e8e8;
+      border: 1px solid #bbb;
+    }
+    td small{
+      font-size:1em;
+    }
+    tr .project-name {
+      border-left: 4px solid #85994b;
+    }
+    tr.disabled td {
+      border-color: #c1cacb;
+      color: #999;
+    }
+    tr.unstable td {
+      background: #fabb96;
+      border-color: #f47738;
+    }
+    tr.failure td {
+      background: #d9888c;
+      border-color: #b10e1e;
+    }
+    tr.building td {
+      -webkit-animation-name: fade;
+      -webkit-animation-duration: 1s;
+      -webkit-animation-direction: alternate;
+      -webkit-animation-iteration-count: infinite;
+    }
+      
+    @-webkit-keyframes fade {
+      from {
+        background: rgba(255, 191, 71, 0)
+      }
+      to {
+        background: rgba(255, 191, 71, 1)
+      }
+    }
+  </style>
+
+</head>
+<body>
+  <header>
+    <h1>GOV.UK CI Statusboard</h1>
+  </header>
+  <div class="content">
+    <div class="alert failure">
+      <h2 class="status">Currently Failing</h2>
+
+      <p class="project-names"></p>
+    </div>
+    <div class="project-list">
+      <div class="column">
+        <table id="column-1">
+          <thead>
+            <tr>
+              <th>Project Name</th>
+              <th>Built</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div class="column">
+        <table id="column-2">
+          <thead>
+            <tr>
+              <th>Project Name</th>
+              <th>Built</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div class="column">
+        <table id="column-3">
+          <thead>
+            <tr>
+              <th>Project Name</th>
+              <th>Built</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div class="column">
+        <table id="column-4">
+          <thead>
+            <tr>
+              <th>Project Name</th>
+              <th>Built</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <footer>
+  </footer>
+
+  <script src="./javascripts/main.js"></script>
+  <script src="./javascripts/project.js"></script>
+</body>
+
