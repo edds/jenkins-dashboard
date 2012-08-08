@@ -45,7 +45,7 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
       var lastBuild = this.original.lastCompletedBuild,
           difference;
       if(lastBuild){
-        return timeSince(lastBuild.timestamp);
+        return timeSince(lastBuild.timestamp+lastBuild.duration);
       } else {
         return '-';
       }
@@ -149,11 +149,11 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
       return interval + " days";
     }
     interval = Math.floor(seconds / 3600);
-    if (interval > 1) {
+    if (interval >= 1) {
       return interval + " hrs";
     }
     interval = Math.floor(seconds / 60);
-    if (interval > 1) {
+    if (interval >= 1) {
       return interval + " mins";
     }
     return Math.floor(seconds) + " secs";
