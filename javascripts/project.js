@@ -74,8 +74,8 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
     },
     render: function(){
       return '<tr id="'+ this.id +'" class="'+ this.getClass() +'">'
-              + '<td class="project-name">'+ this.name +'</td>'
               + '<td class="health">'+ this.getLastBuildTime() +'</td>'
+              + '<td class="project-name">'+ this.name +'</td>'
             + '</tr>';
     },
     update: function(data){

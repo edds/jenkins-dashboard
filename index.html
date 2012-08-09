@@ -11,12 +11,24 @@
       font-family: 'nta', Helvetica Neue, Arial, sans-serif;
       padding: 0;
       margin: 0;
+      background: #303030;
     }
+    
+    #wrapper {
+      margin: 0 auto;
+      width: 1280px;
+      height: 720px;
+      overflow: hidden;
+      background: white;
+    }
+    
     /*** Typographic Resets ***/
     h1, h2, h3, h4, h5, p, th, td {
       padding: 0;
       margin: 0;
-      font-size: 1em;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 20px;
     }
     /*** Header ***/
     header {
@@ -24,43 +36,43 @@
       -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.3);
       -moz-box-shadow: 0 0 5px rgba(0,0,0,0.3);
       box-shadow: 0 0 5px rgba(0,0,0,0.3);
-      height: 1.9em;
-      padding: 0.4em 0;
     }
     header h1 {
-      padding: 0 16px;
+      padding: 8px 28px;
       margin: 0;
-      font-size: 24px;
-      font-weight: normal;
       color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.125em;
+      word-spacing: 0.25em;
     }
     /*** Content ***/
     .content {
-      padding: 16px;
+      padding: 8px;
     }
     /*** Content > Alert ***/
     .alert {
       position: relative;
       background: #b10e1e;
       color: #fff;
-      margin-bottom: 16px;
+      margin: 16px 16px 0;
+      padding: 16px 16px 14px;
       display: none;
-    }
-    .alert .status {
-      text-align: left;
-      padding: 0 8px;
-      text-transform: uppercase;
-      font-size: 1.4em;
-      position: absolute;
-      left: 0;
-      top: 0;
-    }
-    .alert .project-names {
-      padding: .2em 0;
-      margin: 0;
-      font-size: 4.5em;
       text-align: center;
     }
+    .alert .status,
+    .alert .project-names {
+      display: inline;
+      text-transform: uppercase;
+      letter-spacing: 0.125em;
+      word-spacing: 0.25em;
+    }
+    .alert .status {
+      padding-right: 16px;
+    }
+    .alert .project-names {
+      font-size: 22px;
+    }
+    
     /*** Project Info ***/
     .column {
       width: 25%;
@@ -69,48 +81,53 @@
     table {
       border-collapse: collapse;
       border-spacing: 0;
-      width: 95%;
+      width: 284px;
+      margin: 16px;
+      
     }
     .column:first-child {
     }
     th, td {
+      padding: 4px 4px;
       vertical-align: middle;
-      line-height: 1.3em;
-      padding: 0.4em;
+    }
+    th:first-child, td:first-child {
+      width: 25%;
     }
     tr:nth-child(even) td {
       background-color: #fff;
     }
     td {
-      background: #fafafa;
-      border: dotted 1px #bbb;
+/*       background: #fafafa; */
+      border: solid 1px #ddd;
+      border-width: 1px 0;
     }
     th {
-      line-height: 1.25em;
       text-align: left;
-      color: #000;
       font-weight: normal;
-      background-color: #e1e8e8;
-      border: 1px solid #bbb;
+      color: #777;
+      border: none;
+    }
+    td:first-child {
+      text-transform: uppercase;
+      letter-spacing: 0.125em;
+      word-spacing: 0.25em;
+      font-size: 12px;
     }
     td small{
-      font-size:1em;
     }
     tr .project-name {
-      border-left: 4px solid #85994b;
-      font-size: 1.1em;
+/*       border-left: 4px solid #85994b; */
     }
     tr.disabled td {
-      border-color: #c1cacb;
       color: #999;
     }
     tr.unstable td {
       background: #fabb96;
-      border-color: #f47738;
     }
     tr.failure td {
-      background: #d9888c;
-      border-color: #b10e1e;
+      background: #b10e1e;
+      color: white;
     }
     tr.building td {
       -webkit-animation-name: fade;
@@ -136,65 +153,69 @@
 
 </head>
 <body>
-  <header>
-    <h1>GOV.UK CI Statusboard</h1>
-  </header>
-  <div class="content">
-    <div class="alert failure">
-      <h2 class="status">Currently Failing</h2>
-
-      <p class="project-names"></p>
+  <div id="wrapper">
+    <header>
+      <h1>GOV.UK CI Statusboard</h1>
+    </header>
+    <div class="content">
+      <div class="alert failure">
+        <h2 class="status">Currently Failing</h2>
+  
+        <p class="project-names"></p>
+      </div>
+      <div class="project-list">
+        <div class="column">
+          <table id="column-1">
+            <thead>
+              <tr>
+                <th>Built</th>
+                <th>Project Name</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+        <div class="column">
+          <table id="column-2">
+            <thead>
+              <tr>
+                <th>Built</th>
+                <th>Project Name</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+        <div class="column">
+          <table id="column-3">
+            <thead>
+              <tr>
+                <th>Built</th>
+                <th>Project Name</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+        <div class="column">
+          <table id="column-4">
+            <thead>
+              <tr>
+                <th>Built</th>
+                <th>Project Name</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-    <div class="project-list">
-      <div class="column">
-        <table id="column-1">
-          <thead>
-            <tr>
-              <th>Project Name</th>
-              <th>Built</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-      <div class="column">
-        <table id="column-2">
-          <thead>
-            <tr>
-              <th>Project Name</th>
-              <th>Built</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-      <div class="column">
-        <table id="column-3">
-          <thead>
-            <tr>
-              <th>Project Name</th>
-              <th>Built</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-      <div class="column">
-        <table id="column-4">
-          <thead>
-            <tr>
-              <th>Project Name</th>
-              <th>Built</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <footer>
+    </footer>
   </div>
 
   <script src="./settings.js"></script>
