@@ -26,9 +26,9 @@
     h1, h2, h3, h4, h5, p, th, td {
       padding: 0;
       margin: 0;
-      font-size: 13px;
+      font-size: 17px;
       font-weight: 400;
-      line-height: 20px;
+      line-height: 23px;
     }
     /*** Header ***/
     header {
@@ -83,16 +83,19 @@
       border-spacing: 0;
       width: 284px;
       margin: 16px;
-      
+      table-layout:fixed;
     }
     .column:first-child {
     }
     th, td {
       padding: 4px 4px;
       vertical-align: middle;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     th:first-child, td:first-child {
-      width: 25%;
+      width: 60px;
     }
     tr:nth-child(even) td {
       background-color: #fff;
@@ -107,6 +110,8 @@
       font-weight: normal;
       color: #777;
       border: none;
+      font-size: 12px;
+      letter-spacing: 0.125em;
     }
     td:first-child {
       text-transform: uppercase;
