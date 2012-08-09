@@ -161,11 +161,11 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
     }
     interval = Math.floor(seconds / 2592000);
     if (interval > 1) {
-      return interval + " mths";
+      return interval + " mth";
     }
     interval = Math.floor(seconds / 86400);
     if (interval > 1) {
-      return interval + " days";
+      return interval + " day";
     }
     interval = Math.floor(seconds / 3600);
     if (interval >= 1) {
@@ -173,9 +173,9 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
     }
     interval = Math.floor(seconds / 60);
     if (interval >= 1) {
-      return interval + " mins";
+      return interval + " min";
     }
-    return Math.floor(seconds) + " secs";
+    return Math.floor(seconds) + " sec";
   }
 
   jenkinsDash.Project = Project;
