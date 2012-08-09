@@ -80,13 +80,28 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
     script.setAttribute('src', url + callback);
   };
 
-  window.setInterval(function(){
-    var updateUrl = 'http://ci.alphagov.co.uk/api/json?pretty=true&tree=views[name,jobs[name,lastCompletedBuild[result,duration,timestamp],lastBuild[result],healthReport[description,score],inQueue,buildable,color]]&jsonp=';
+  manager.login = function(user, pass){
+    var iframe = document.createElement('iframe'),
+        script = document.getElementsByTagName('script')[0];
+
+    script.parentNode.insertBefore(iframe, script);
+    iframe.contentDocument.body.innerHTML = '<form action="'+ jenkinsDash.settings.host +'/j_acegi_security_check" method="post">'
+        + '<input type="hidden" name="j_username" value="'+ jenkinsDash.settings.user +'">'
+        + '<input type="hidden" name="j_password" value="'+ jenkinsDash.settings.pass +'">'
+        + '<input type="hidden" name="from" value="/api">'
+      + '</form>';
+    iframe.contentDocument.getElementsByTagName('form')[0].submit();
+    window.setTimeout(function(){
+      iframe.parentNode.removeChild(iframe);
+    }, 10000);
+  };
+
+  manager.login();
+  manager.interval = window.setInterval(function(){
+    var updateUrl = jenkinsDash.settings.host + '/api/json?tree=views[name,jobs[name,lastCompletedBuild[result,duration,timestamp],lastBuild[result],healthReport[description,score],inQueue,buildable,color]]&jsonp=';
     manager.fetch(updateUrl, manager.update);
   }, 5000);
 
-
   jenkinsDash.manager = manager;
 }(jenkinsDash));
-
 
