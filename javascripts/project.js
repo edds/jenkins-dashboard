@@ -42,10 +42,19 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
       return '-';
     },
     getLastBuildTime: function(){
-      var lastBuild = this.original.lastCompletedBuild,
-          difference;
+      var lastBuild = this.original.lastCompletedBuild;
+
       if(lastBuild){
-        return timeSince(lastBuild.timestamp+lastBuild.duration);
+        return lastBuild.timestamp+lastBuild.duration;
+      } else {
+        return false;
+      }
+    },
+    getTimeSinceLastBuild: function(){
+      var lastBuild = this.getLastBuildTime();
+
+      if(lastBuild){
+        return timeSince(lastBuild);
       } else {
         return '-';
       }
@@ -74,7 +83,7 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
     },
     render: function(){
       return '<tr id="'+ this.id +'" class="'+ this.getClass() +'">'
-              + '<td class="health">'+ this.getLastBuildTime() +'</td>'
+              + '<td class="health">'+ this.getTimeSinceLastBuild() +'</td>'
               + '<td class="project-name">'+ this.name +'</td>'
             + '</tr>';
     },
@@ -83,7 +92,7 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
       var el = document.getElementById(this.id);
       if(el){
         el.setAttribute('class', this.getClass());
-        el.getElementsByClassName('health')[0].innerHTML = this.getLastBuildTime()
+        el.getElementsByClassName('health')[0].innerHTML = this.getTimeSinceLastBuild()
       }
     }
   };
@@ -120,6 +129,16 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
     }
     return out;
   };
+  Project.findByLastUpdate = function(date){
+    var i, _i, out = [];
+    for(i=0,_i=projects.length; i<_i; i++){
+      if(projects[i].getLastBuildTime() > date){
+        out.push(projects[i]);
+      }
+    }
+    return out;
+  };
+
 
   // Helper Methods
   function register(obj){
