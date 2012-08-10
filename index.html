@@ -92,7 +92,7 @@
     .column:first-child {
     }
     th, td {
-      padding: 4px 4px;
+      padding: 3px 4px 5px;
       vertical-align: top;
       white-space: nowrap;
       overflow: hidden;
@@ -118,7 +118,7 @@
       letter-spacing: 0.125em;
     }
     td:first-child {
-      padding: 7px 4px 1px;
+      padding: 6px 4px 2px;
       text-transform: uppercase;
       letter-spacing: 0.125em;
       word-spacing: 0.25em;
@@ -229,15 +229,16 @@
     }
 
     body.inverted tr.building td {
+      color: #ffbf47;
       -webkit-animation-name: throb;
     }
 
     @-webkit-keyframes throb {
       from {
-        color: rgba(43, 140, 196, 0.2)
+        opacity: 0.2;
       }
       to {
-        color: rgba(43, 140, 196, 1)
+        opacity: 1;
       }
     }
 
