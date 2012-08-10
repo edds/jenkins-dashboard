@@ -89,7 +89,7 @@
     }
     th, td {
       padding: 4px 4px;
-      vertical-align: middle;
+      vertical-align: top;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -114,6 +114,7 @@
       letter-spacing: 0.125em;
     }
     td:first-child {
+      padding: 6px 4px 2px;
       text-transform: uppercase;
       letter-spacing: 0.125em;
       word-spacing: 0.25em;
@@ -153,11 +154,95 @@
       position: absolute;
       left: -9999em;
     }
+    
+    
+    
+    
+    
+    /* DARK COLOR SCHEME */
+    
+    body.inverted,
+    body.inverted #wrapper {
+      background: black;
+    }
+    
+    body.inverted h1, body.inverted h2, body.inverted h3, body.inverted h4, body.inverted h5, body.inverted p, body.inverted th, body.inverted td {
+      font-size: 19px;
+      line-height: 22px;
+    }
+    
+    body.inverted header {
+      background: transparent;
+    }
+    
+    body.inverted header h1 {
+      padding-left: 24px;
+    }
+    
+    body.inverted .alert {
+      margin-top: 0;
+    }
+    
+    body.inverted th,
+    body.inverted td {
+      border: none;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    
+    body.inverted th:first-child, 
+    body.inverted td:first-child {
+      width: 70px;
+    }
+    
+    body.inverted th,
+    body.inverted td:first-child {
+      font-size: 12px;
+    }
+    
+    body.inverted td {
+      background: transparent;
+      color: #bbb;
+    }
+    
+    body.inverted tr.disabled td {
+      color: #555;
+    }
+    
+    body.inverted tr.disabled td:first-child {
+      text-decoration: line-through;
+    }
+    
+    body.inverted tr.building td {
+      -webkit-animation-name: throb;
+    }
+          
+    @-webkit-keyframes throb {
+      from {
+        color: rgba(255, 191, 71, 0.2)
+      }
+      to {
+        color: rgba(255, 191, 71, 1)
+      }
+    }
+    
+    body.inverted tr.failure td {
+      background: #b10e1e;
+      color: white;
+      padding-right: 5px;
+    }
+    
+    body.inverted tr.failure td:first-child {
+      padding-right: 0;
+      padding-left: 5px;
+      width: 65px;
+    }
+
 
   </style>
 
 </head>
-<body>
+<body class="inverted">
   <div id="wrapper">
     <header>
       <h1>GOV.UK CI Statusboard</h1>
