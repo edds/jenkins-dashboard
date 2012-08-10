@@ -89,7 +89,8 @@
       margin: 16px;
       table-layout:fixed;
     }
-    .column:first-child {
+    thead {
+      display: none;
     }
     th, td {
       padding: 3px 4px 5px;
@@ -105,7 +106,6 @@
       background-color: #fff;
     }
     td {
-/*       background: #fafafa; */
       border: solid 1px #ddd;
       border-width: 1px 0;
     }
@@ -123,11 +123,6 @@
       letter-spacing: 0.125em;
       word-spacing: 0.25em;
       font-size: 12px;
-    }
-    td small{
-    }
-    tr .project-name {
-/*       border-left: 4px solid #85994b; */
     }
     tr.disabled td {
       color: #999;
@@ -181,53 +176,42 @@
       font-size: 20px;
       line-height: 22px;
     }
-
     body.inverted header {
       background: transparent;
     }
-
     body.inverted header h1 {
       padding-left: 24px;
     }
-
     body.inverted .alert {
       margin-top: 0;
     }
-
     body.inverted .alert .project-names {
       font-size: 26px;
     }
-
     body.inverted th,
     body.inverted td {
       border: none;
       padding-left: 0;
       padding-right: 0;
     }
-
     body.inverted th:first-child,
     body.inverted td:first-child {
       width: 70px;
     }
-
     body.inverted th,
     body.inverted td:first-child {
       font-size: 14px;
     }
-
     body.inverted td {
       background: transparent;
       color: #bbb;
     }
-
     body.inverted tr.disabled td {
       color: #555;
     }
-
     body.inverted tr.disabled td:first-child {
       text-decoration: line-through;
     }
-
     body.inverted tr.building td {
       color: #ffbf47;
       -webkit-animation-name: throb;
@@ -248,14 +232,12 @@
       padding-right: 5px;
       border-radius: 0 2px 2px 0;
     }
-
     body.inverted tr.unstable td {
       background: #ffbf47;
       color: #000;
       padding-right: 5px;
       border-radius: 0 2px 2px 0;
     }
-
     body.inverted tr.failure td:first-child,
     body.inverted tr.unstable td:first-child {
       padding-right: 0;
@@ -263,10 +245,7 @@
       width: 65px;
       border-radius: 2px 0 0 2px;
     }
-
-
   </style>
-
 </head>
 <body class="inverted">
   <div id="wrapper">
@@ -333,8 +312,6 @@
         </div>
       </div>
     </div>
-    <footer>
-    </footer>
   </div>
 
   <script src="./settings.js"></script>
