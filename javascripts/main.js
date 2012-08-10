@@ -27,17 +27,25 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
   };
   manager.refresh = function(){
     var failed = jenkinsDash.Project.findByStatus('failure'),
-        unstable = jenkinsDash.Project.findByStatus('unstable'),
-        failureAlert = document.querySelectorAll('.failure')[0];
-        names = document.querySelectorAll('.failure .project-names')[0];
+        unstable = jenkinsDash.Project.findByStatus('unstable');
 
-    if(failed.length){
-      names.innerHTML = failed.map(function(job){ return job.name; }).join(', ');
-      failureAlert.style.display = "block";
+    manager.showAlert('failure', failed);
+    manager.showAlert('unstable', unstable);
+  };
+  manager.showAlert = function(type, projects){
+    var alert = jenkinsDash.Project.findByStatus(type),
+        unstable = jenkinsDash.Project.findByStatus('unstable'),
+        alertEl = document.querySelectorAll('.'+type)[0];
+        names = alertEl.querySelectorAll('.project-names')[0];
+
+    if(projects.length){
+      names.innerHTML = projects.map(function(job){ return job.name; }).join(', ');
+      alertEl.style.display = "block";
     } else {
-      failureAlert.style.display = "none";
+      alertEl.style.display = "none";
     }
   };
+
   manager.redraw = function(){
     var projects = jenkinsDash.Project.findByView(manager.view),
         columns = 4,
@@ -95,12 +103,18 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
       iframe.parentNode.removeChild(iframe);
     }, 10000);
   };
+  manager.start = function(){
+    manager.interval = window.setInterval(function(){
+      var updateUrl = jenkinsDash.settings.host + '/api/json?tree=views[name,jobs[name,lastCompletedBuild[result,duration,timestamp],lastBuild[result],healthReport[description,score],inQueue,buildable,color]]&jsonp=';
+      manager.fetch(updateUrl, manager.update);
+    }, 5000);
+  };
+  manager.stop = function(){
+    window.clearInterval(manager.interval);
+  };
 
   manager.login();
-  manager.interval = window.setInterval(function(){
-    var updateUrl = jenkinsDash.settings.host + '/api/json?tree=views[name,jobs[name,lastCompletedBuild[result,duration,timestamp],lastBuild[result],healthReport[description,score],inQueue,buildable,color]]&jsonp=';
-    manager.fetch(updateUrl, manager.update);
-  }, 5000);
+  manager.start();
 
   jenkinsDash.manager = manager;
 }(jenkinsDash));
