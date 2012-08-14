@@ -223,6 +223,23 @@
       }
     }
 
+    body.inverted tr.success td {
+      -webkit-animation-name: success-fade;
+      -webkit-animation-duration: 0.6s;
+      -webkit-animation-direction: normal;
+      -webkit-animation-iteration-count: 1;
+    }
+
+    @-webkit-keyframes success-fade {
+      from {
+        color: #85994b;
+      }
+
+      to {
+        color: #bbb;
+      }
+    }
+
     body.inverted tr.failure td {
       background: #b10e1e;
       color: white;
