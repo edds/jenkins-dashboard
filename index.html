@@ -209,9 +209,30 @@
     body.inverted tr.disabled td:first-child {
       text-decoration: line-through;
     }
+
+    body.inverted tr.success td {
+      -webkit-animation-name: success-throb;
+      -webkit-animation-duration: 10s;
+      -webkit-animation-direction: normal;
+      -webkit-animation-iteration-count: 1;
+    }
+
+    @-webkit-keyframes success-throb {
+      from {
+        color: #85994b;
+      }
+
+      to {
+        color: #bbb;
+      }
+    }
+
     body.inverted tr.building td {
       color: #ffbf47;
       -webkit-animation-name: throb;
+      -webkit-animation-duration: 1s;
+      -webkit-animation-direction: alternate;
+      -webkit-animation-iteration-count: infinite;
     }
 
     @-webkit-keyframes throb {
@@ -220,23 +241,6 @@
       }
       to {
         opacity: 1;
-      }
-    }
-
-    body.inverted tr.success td {
-      -webkit-animation-name: success-fade;
-      -webkit-animation-duration: 0.6s;
-      -webkit-animation-direction: normal;
-      -webkit-animation-iteration-count: 1;
-    }
-
-    @-webkit-keyframes success-fade {
-      from {
-        color: #85994b;
-      }
-
-      to {
-        color: #bbb;
       }
     }
 
