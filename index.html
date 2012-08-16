@@ -1,6 +1,6 @@
 <!doctype html>
 
-<html lang=en">
+<html lang="en">
 <head>
   <title>Jenkins Dashboard</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -161,10 +161,7 @@
 
     /* DARK COLOR SCHEME */
 
-    body.inverted {
-      background: white;
-    }
-    body.inverted #wrapper {
+    body.inverted, body.inverted #wrapper {
       background: black;
     }
 
@@ -212,9 +209,30 @@
     body.inverted tr.disabled td:first-child {
       text-decoration: line-through;
     }
+
+    body.inverted tr.success td {
+      -webkit-animation-name: success-throb;
+      -webkit-animation-duration: 10s;
+      -webkit-animation-direction: normal;
+      -webkit-animation-iteration-count: 1;
+    }
+
+    @-webkit-keyframes success-throb {
+      from {
+        color: #85994b;
+      }
+
+      to {
+        color: #bbb;
+      }
+    }
+
     body.inverted tr.building td {
       color: #ffbf47;
       -webkit-animation-name: throb;
+      -webkit-animation-duration: 1s;
+      -webkit-animation-direction: alternate;
+      -webkit-animation-iteration-count: infinite;
     }
 
     @-webkit-keyframes throb {
