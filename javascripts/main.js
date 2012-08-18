@@ -6,7 +6,8 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
 
   manager.update = function(data){
     var job, i, _i, j, _j,
-        newProjects = false;
+        newProjects = false,
+        visibleProjects = [];
 
     for(i=0, _i=data.views.length; i<_i; i++){
       for(j=0, _j=data.views[i].jobs.length; j<_j; j++){
@@ -17,20 +18,24 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
         } else {
           job.update(data.views[i].jobs[j]);
         }
-        job.addView(data.views[i].name);
+        if(data.views[i].name === manager.view){
+          visibleProjects.push(job);
+        }
       }
     }
     if(newProjects){
       manager.redraw();
     }
-    manager.refresh();
+    manager.refresh(visibleProjects);
   };
-  manager.refresh = function(){
+  manager.refresh = function(visibleProjects){
     var failed = jenkinsDash.Project.findByStatus('failure'),
         unstable = jenkinsDash.Project.findByStatus('unstable');
 
     manager.showAlert('failure', failed);
     manager.showAlert('unstable', unstable);
+
+    jenkinsDash.Project.syncVisible(visibleProjects);
   };
   manager.showAlert = function(type, projects){
     var alert = jenkinsDash.Project.findByStatus(type),
@@ -47,21 +52,15 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
   };
 
   manager.redraw = function(){
-    var projects = jenkinsDash.Project.findByView(manager.view),
-        columns = 4,
-        tableSize = Math.ceil(projects.length / columns),
-        i, _i, table, j, _j, html;
+    var projects = jenkinsDash.Project.all(),
+        i, _i, list,
+        html = [];
 
-    for(i=0,_i=columns; i<_i; i++){
-      html = []
-      for(j=0,_j=tableSize; j<_j; j++){
-        if(projects[(i*tableSize) + j]){
-          html.push(projects[(i*tableSize) + j].render());
-        }
-      }
-      table = document.querySelectorAll('.project-list #column-'+(i+1)+' tbody')[0];
-      table.innerHTML = html.join('');
+    for(i=0,_i=projects.length; i<_i; i++){
+      html.push(projects[i].render());
     }
+    list = document.querySelectorAll('.project-list')[0];
+    list.innerHTML = html.join('');
   };
 
   manager.fetch = function(url, fn){

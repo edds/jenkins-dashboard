@@ -11,34 +11,25 @@
       font-family: 'nta', Helvetica Neue, Arial, sans-serif;
       padding: 0;
       margin: 0;
-      background: #303030;
+      background: black;
     }
 
     #wrapper {
       margin: 0 auto;
       width: 1280px;
-      height: 720px;
-      overflow: hidden;
-      background: white;
     }
 
     /*** Typographic Resets ***/
     h1, h2, p, th, td {
       padding: 0;
       margin: 0;
-      font-size: 17px;
+      font-size: 20px;
       font-weight: 400;
-      line-height: 23px;
+      line-height: 22px;
     }
     /*** Header ***/
-    header {
-      background-color: #303030;
-      -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.3);
-      -moz-box-shadow: 0 0 5px rgba(0,0,0,0.3);
-      box-shadow: 0 0 5px rgba(0,0,0,0.3);
-    }
     header h1 {
-      padding: 8px 28px;
+      padding: 8px 24px;
       margin: 0;
       color: #fff;
       text-transform: uppercase;
@@ -54,7 +45,7 @@
       position: relative;
       background: #b10e1e;
       color: #fff;
-      margin: 16px 16px 0;
+      margin: 0 16px;
       padding: 16px 16px 14px;
       display: none;
       text-align: center;
@@ -74,160 +65,84 @@
       padding-right: 16px;
     }
     .alert .project-names {
-      font-size: 22px;
+      font-size: 26px;
     }
 
-    /*** Project Info ***/
-    .column {
-      width: 25%;
-      float: left;
+    /*** Project List ***/
+    .project-list {
+      -moz-columns: 4;
+      -moz-column-gap: 13px;
+      -webkit-columns: 4;
+      -webkit-column-gap: 13px;
+      columns: 4;
+      column-gap: 13px;
+      padding: 13px;
+      position: relative;
+      color: #bbb;
     }
-    table {
-      border-collapse: collapse;
-      border-spacing: 0;
-      width: 284px;
-      margin: 16px;
-      table-layout:fixed;
+    .project {
+      padding: 0 5px;
     }
-    thead {
+    .project.hidden {
       display: none;
     }
-    th, td {
-      padding: 3px 4px 5px;
-      vertical-align: top;
+    .project span {
+      display: inline-block;
+      padding: 3px 0 5px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    th:first-child, td:first-child {
-      width: 60px;
+    .project .name {
+      width: 76%;
     }
-    tr:nth-child(even) td {
-      background-color: #fff;
-    }
-    td {
-      border: solid 1px #ddd;
-      border-width: 1px 0;
-    }
-    th {
-      text-align: left;
-      font-weight: normal;
-      color: #777;
-      border: none;
-      font-size: 12px;
-      letter-spacing: 0.125em;
-    }
-    td:first-child {
-      padding: 6px 4px 2px;
+    .project .built {
+      width: 24%;
+      padding: 6px 0px 2px;
       text-transform: uppercase;
       letter-spacing: 0.125em;
       word-spacing: 0.25em;
-      font-size: 12px;
-    }
-    tr.disabled td {
-      color: #999;
-    }
-    tr.unstable td {
-      color: #000;
-      background: #fabb96;
-    }
-    tr.failure td {
-      background: #b10e1e;
-      color: white;
-    }
-    tr.building td {
-      -webkit-animation-name: fade;
-      -webkit-animation-duration: 1s;
-      -webkit-animation-direction: alternate;
-      -webkit-animation-iteration-count: infinite;
-    }
-
-    @-webkit-keyframes fade {
-      from {
-        background: rgba(255, 191, 71, 0)
-      }
-      to {
-        background: rgba(255, 191, 71, 1)
-      }
-    }
-    iframe {
-      position: absolute;
-      left: -9999em;
-    }
-
-
-
-
-
-    /* DARK COLOR SCHEME */
-
-    body.inverted, body.inverted #wrapper {
-      background: black;
-    }
-
-    body.inverted h1,
-    body.inverted h2,
-    body.inverted p,
-    body.inverted th,
-    body.inverted td {
-      font-size: 20px;
-      line-height: 22px;
-    }
-    body.inverted header {
-      background: transparent;
-    }
-    body.inverted header h1 {
-      padding-left: 24px;
-    }
-    body.inverted .alert {
-      margin-top: 0;
-    }
-    body.inverted .alert .project-names {
-      font-size: 26px;
-    }
-    body.inverted th,
-    body.inverted td {
-      border: none;
-      padding-left: 0;
-      padding-right: 0;
-    }
-    body.inverted th:first-child,
-    body.inverted td:first-child {
-      width: 70px;
-    }
-    body.inverted th,
-    body.inverted td:first-child {
       font-size: 14px;
     }
-    body.inverted td {
-      background: transparent;
-      color: #bbb;
-    }
-    body.inverted tr.disabled td {
+    .project.disabled {
       color: #555;
     }
-    body.inverted tr.disabled td:first-child {
+    .project.disabled .built {
       text-decoration: line-through;
     }
-
-    body.inverted tr.success td {
+    .project.unstable .built,
+    .project.unstable .name,
+    .project.failure .built,
+    .project.failure .name {
+      color: white;
+    }
+    .project.unstable .built,
+    .project.failure .built {
+      margin-left: -5px;
+      padding-left: 5px;
+      border-radius: 2px 0 0 2px;
+    }
+    .project.unstable .name,
+    .project.failure .name {
+      margin-right: -5px;
+      padding-right: 5px;
+      border-radius: 0 2px 2px 0;
+    }
+    .project.failure .built,
+    .project.failure .name {
+      background: #b10e1e;
+    }
+    .project.unstable .built,
+    .project.unstable .name {
+      background: #ffbf47;
+    }
+    .project.success span {
       -webkit-animation-name: success-throb;
       -webkit-animation-duration: 10s;
       -webkit-animation-direction: normal;
       -webkit-animation-iteration-count: 1;
     }
-
-    @-webkit-keyframes success-throb {
-      from {
-        color: #85994b;
-      }
-
-      to {
-        color: #bbb;
-      }
-    }
-
-    body.inverted tr.building td {
+    .project.building span {
       color: #ffbf47;
       -webkit-animation-name: throb;
       -webkit-animation-duration: 1s;
@@ -235,6 +150,18 @@
       -webkit-animation-iteration-count: infinite;
     }
 
+    iframe {
+      position: absolute;
+      left: -9999em;
+    }
+    @-webkit-keyframes success-throb {
+      from {
+        color: #85994b;
+      }
+      to {
+        color: #bbb;
+      }
+    }
     @-webkit-keyframes throb {
       from {
         opacity: 0.2;
@@ -242,26 +169,6 @@
       to {
         opacity: 1;
       }
-    }
-
-    body.inverted tr.failure td {
-      background: #b10e1e;
-      color: white;
-      padding-right: 5px;
-      border-radius: 0 2px 2px 0;
-    }
-    body.inverted tr.unstable td {
-      background: #ffbf47;
-      color: #000;
-      padding-right: 5px;
-      border-radius: 0 2px 2px 0;
-    }
-    body.inverted tr.failure td:first-child,
-    body.inverted tr.unstable td:first-child {
-      padding-right: 0;
-      padding-left: 5px;
-      width: 65px;
-      border-radius: 2px 0 0 2px;
     }
   </style>
 </head>
@@ -279,56 +186,7 @@
         <h2 class="status">Currently Unstable</h2>
         <p class="project-names"></p>
       </div>
-      <div class="project-list">
-        <div class="column">
-          <table id="column-1">
-            <thead>
-              <tr>
-                <th>Built</th>
-                <th>Project Name</th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>
-        <div class="column">
-          <table id="column-2">
-            <thead>
-              <tr>
-                <th>Built</th>
-                <th>Project Name</th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>
-        <div class="column">
-          <table id="column-3">
-            <thead>
-              <tr>
-                <th>Built</th>
-                <th>Project Name</th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>
-        <div class="column">
-          <table id="column-4">
-            <thead>
-              <tr>
-                <th>Built</th>
-                <th>Project Name</th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <div class="project-list"></div>
     </div>
   </div>
 

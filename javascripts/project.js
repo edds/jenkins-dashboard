@@ -6,7 +6,7 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
       Project = function(options){
         this.id = getId(options.name);
         this.name = options.name;
-        this.views = [];
+        this.hiding = false;
 
         this.original = options;
         register(this);
@@ -14,14 +14,6 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
 
   // Instance Methods
   Project.prototype = {
-    addView: function(view){
-      if(this.views.indexOf(view) < 0){
-        this.views.push(view);
-      }
-    },
-    inView: function(view){
-      return (this.views.indexOf(view) >= 0);
-    },
     getStatus: function(){
       if(!this.original.buildable || this.original.color === 'grey'){
         return 'disabled';
@@ -79,27 +71,40 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
       return '&nbsp;';
     },
     getClass: function(){
-      return this.getStatus() +' '+ this.getQueueClass();
+      return 'project '+ this.getStatus() +' '+ this.getQueueClass()
+            + (this.hiding ? ' hidden' : '');
     },
     render: function(){
-      return '<tr id="'+ this.id +'" class="'+ this.getClass() +'">'
-              + '<td class="health">'+ this.getTimeSinceLastBuild() +'</td>'
-              + '<td class="project-name">'+ this.name +'</td>'
-            + '</tr>';
+      return '<p id="'+ this.id +'" class="'+ this.getClass() +'">'
+              + '<span class="built">'+ this.getTimeSinceLastBuild() +'</span>'
+              + '<span class="name">'+ this.name +'</span>'
+            + '</p>';
     },
     update: function(data){
-      this.original = data;
+      if(data){
+        this.original = data;
+      }
       var el = document.getElementById(this.id);
       if(el){
         el.setAttribute('class', this.getClass());
-        el.getElementsByClassName('health')[0].innerHTML = this.getTimeSinceLastBuild()
+        el.getElementsByClassName('built')[0].innerHTML = this.getTimeSinceLastBuild()
       }
+    },
+    show: function(){
+      this.hiding = false;
+      this.update();
+    },
+    hide: function(){
+      this.hiding = true;
+      this.update();
     }
   };
 
   // Class Methods
   Project.all = function(){
-    return projects;
+    return projects.sort(function(a,b){
+      return a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1;
+    });
   };
   Project.count = function(){
     return projects.length;
@@ -120,15 +125,6 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
     }
     return out;
   };
-  Project.findByView = function(view){
-    var i, _i, out = [];
-    for(i=0,_i=projects.length; i<_i; i++){
-      if(projects[i].inView(view)){
-        out.push(projects[i]);
-      }
-    }
-    return out;
-  };
   Project.findByLastUpdate = function(date){
     var i, _i, out = [];
     for(i=0,_i=projects.length; i<_i; i++){
@@ -138,6 +134,17 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
     }
     return out;
   };
+  Project.syncVisible = function(visible){
+    var visibleIds = visible.map(function(p){ return p.id; });
+    projects.forEach(function(project){
+      if(visibleIds.indexOf(project.id) > -1){
+        project.show();
+      } else {
+        project.hide();
+      }
+    });
+  };
+
 
 
   // Helper Methods
