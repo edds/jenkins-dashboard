@@ -87,6 +87,26 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
     script.setAttribute('src', url + callback);
   };
 
+  manager.timer = function(duration){
+    var loader = document.getElementById("refresh-timer"),
+        end = +new Date() + duration,
+        radius = 12,
+        interval;
+
+    interval = window.setInterval(function(){
+      if(+new Date() > end){
+        window.clearInterval(interval);
+        return true;
+      }
+      var degrees = 360 - 360*((end - new Date())/duration),
+          y = -Math.cos((degrees/180)*Math.PI)*radius,
+          x = Math.sin((degrees/180)*Math.PI)*radius,
+          mid = (degrees < 180) ? '0,1' : '1,1',
+          d = "M"+radius+","+radius+" v -"+radius+" A"+radius+","+radius+" 1 "+mid+" " + (x+radius) + "," + (y+radius) + " z";
+      loader.setAttribute("d", d);
+    }, 50);
+  };
+
   manager.login = function(user, pass){
     var iframe = document.createElement('iframe'),
         script = document.getElementsByTagName('script')[0];
@@ -106,7 +126,8 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
     manager.interval = window.setInterval(function(){
       var updateUrl = jenkinsDash.settings.host + '/api/json?tree=views[name,jobs[name,lastCompletedBuild[result,duration,timestamp],lastBuild[result],healthReport[description,score],inQueue,buildable,color]]&jsonp=';
       manager.fetch(updateUrl, manager.update);
-    }, 5000);
+      manager.timer(5e3);
+    }, 5e3);
   };
   manager.stop = function(){
     window.clearInterval(manager.interval);

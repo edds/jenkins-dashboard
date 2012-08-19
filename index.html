@@ -28,6 +28,9 @@
       line-height: 22px;
     }
     /*** Header ***/
+    header {
+      position: relative;
+    }
     header h1 {
       padding: 8px 24px;
       margin: 0;
@@ -36,6 +39,17 @@
       letter-spacing: 0.125em;
       word-spacing: 0.25em;
     }
+    header svg {
+      position: absolute;
+      right: 28px;
+      top: 8px;
+      width: 25px;
+      height: 24px;
+    }
+    header svg path {
+      fill: #666;
+    }
+
     /*** Content ***/
     .content {
       padding: 8px;
@@ -176,6 +190,9 @@
   <div id="wrapper">
     <header>
       <h1>GOV.UK CI Statusboard</h1>
+      <svg>
+        <path id="refresh-timer"></path>
+      </svg>
     </header>
     <div class="content">
       <div class="alert failure">
