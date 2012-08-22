@@ -10,7 +10,8 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
 
         this.original = options;
         register(this);
-      };
+      },
+      oldProject = 9; // number of days before something is considered old
 
   // Instance Methods
   Project.prototype = {
@@ -51,6 +52,20 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
         return '-';
       }
     },
+    getAgeClass: function(){
+      var lastBuild = this.getLastBuildTime(),
+          today = new Date();
+
+      if(lastBuild){
+        if(lastBuild < today.setDate(today.getDate() - oldProject)){
+          return ' old';
+        } else {
+          return ' recent';
+        }
+      } else {
+        return '';
+      }
+    },
     getQueueClass: function(){
       var className = [];
       if(this.original.inQueue){
@@ -72,7 +87,7 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
     },
     getClass: function(){
       return 'project '+ this.getStatus() +' '+ this.getQueueClass()
-            + (this.hiding ? ' hidden' : '');
+            + (this.hiding ? ' hidden' : '') + this.getAgeClass();
     },
     render: function(){
       return '<p id="'+ this.id +'" class="'+ this.getClass() +'">'
