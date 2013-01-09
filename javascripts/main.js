@@ -9,6 +9,14 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
         newProjects = false,
         visibleProjects = [];
 
+    if(data.views.length === 0){
+      manager.stop();
+      window.setTimeout(function(){
+        manager.login();
+        manager.start();
+      }, 10e3);
+    }
+
     for(i=0, _i=data.views.length; i<_i; i++){
       for(j=0, _j=data.views[i].jobs.length; j<_j; j++){
         job = jenkinsDash.Project.find(data.views[i].jobs[j]);
