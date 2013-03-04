@@ -91,16 +91,16 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
 
   manager.timer = function(duration){
     var loader = document.getElementById("refresh-timer"),
-        end = +new Date() + duration,
+        end = Date.now() + duration,
         radius = 12,
         interval;
 
     interval = window.setInterval(function(){
-      if(+new Date() > end){
+      if(Date.now() > end){
         window.clearInterval(interval);
         return true;
       }
-      var degrees = 360 - 360*((end - new Date())/duration),
+      var degrees = 360 - 360*((end - Date.now())/duration),
           y = -Math.cos((degrees/180)*Math.PI)*radius,
           x = Math.sin((degrees/180)*Math.PI)*radius,
           mid = (degrees < 180) ? '0,1' : '1,1',
