@@ -2,7 +2,7 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
 
 (function(jenkinsDash){
   var manager = {};
-  manager.view = 'All';
+  manager.view = jenkinsDash.settings.view || 'All';
 
   manager.update = function(data){
     var job, i, _i, j, _j,
@@ -71,28 +71,22 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
     list.innerHTML = html.join('');
   };
 
-  manager.fetch = function(url, fn){
-    var callback = 'callback' + Math.round(Math.random()*10000),
-        script = document.getElementById('jsonp'),
-        lastScript;
+  manager.fetch = function(){
+    var auth = btoa(jenkinsDash.settings.user +':'+ jenkinsDash.settings.pass),
+        url = jenkinsDash.settings.host + '/api/json?tree=views[name,jobs[name,lastCompletedBuild[result,duration,timestamp],lastBuild[result],healthReport[description,score],inQueue,buildable,color]]',
+        request = new XMLHttpRequest();
 
-    window[callback] = (function(callback, fn){
-      return function(data){
-        fn(data);
-        delete window[callback];
-        script = document.getElementById('jsonp'),
-        script.parentNode.removeChild(script);
-      };
-    }(callback, fn));
-
-    if(!script){
-      script = document.createElement('script');
-      script.setAttribute('id', 'jsonp');
-      lastScript = document.getElementsByTagName('script')[0];
-      lastScript.parentNode.insertBefore(script,lastScript)
+    request.onreadystatechange = function(){
+      if (request.readyState === 4 && request.status === 200) {
+        manager.update(JSON.parse(request.responseText));
+        manager.timer(5e3);
+        manager.interval = window.setTimeout(manager.fetch, 5e3);
+      }
     }
 
-    script.setAttribute('src', url + callback);
+    request.open('GET', url);
+    request.setRequestHeader('Authorization', 'Basic '+ btoa('ccdash:_ccdash_'))
+    request.send();
   };
 
   manager.timer = function(duration){
@@ -115,33 +109,13 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
     }, 50);
   };
 
-  manager.login = function(user, pass){
-    var iframe = document.createElement('iframe'),
-        script = document.getElementsByTagName('script')[0];
-
-    script.parentNode.insertBefore(iframe, script);
-    iframe.contentDocument.body.innerHTML = '<form action="'+ jenkinsDash.settings.host +'/j_acegi_security_check" method="post">'
-        + '<input type="hidden" name="j_username" value="'+ jenkinsDash.settings.user +'">'
-        + '<input type="hidden" name="j_password" value="'+ jenkinsDash.settings.pass +'">'
-        + '<input type="hidden" name="from" value="/api">'
-      + '</form>';
-    iframe.contentDocument.getElementsByTagName('form')[0].submit();
-    window.setTimeout(function(){
-      iframe.parentNode.removeChild(iframe);
-    }, 10000);
-  };
   manager.start = function(){
-    manager.interval = window.setInterval(function(){
-      var updateUrl = jenkinsDash.settings.host + '/api/json?tree=views[name,jobs[name,lastCompletedBuild[result,duration,timestamp],lastBuild[result],healthReport[description,score],inQueue,buildable,color]]&jsonp=';
-      manager.fetch(updateUrl, manager.update);
-      manager.timer(5e3);
-    }, 5e3);
+    manager.fetch();
   };
   manager.stop = function(){
-    window.clearInterval(manager.interval);
+    window.clearTimeout(manager.interval);
   };
 
-  manager.login();
   manager.start();
 
   jenkinsDash.manager = manager;
