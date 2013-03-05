@@ -98,7 +98,7 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
       return '&nbsp;';
     },
     getPercentDone: function(){
-      var radius = 12,
+      var radius = 15,
           degrees = 360 * this.getProjectedPercentOfCurrentBuild(),
           y = -Math.cos((degrees/180)*Math.PI)*radius,
           x = Math.sin((degrees/180)*Math.PI)*radius,
