@@ -59,7 +59,7 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
 
       if(currentBuild && !currentBuild.result){
         percent = (Date.now() - currentBuild.timestamp) / lastBuild.duration;
-        return percent < 1 ? percent : 1;
+        return percent <= 1 ? percent : 0.99;
       } else {
         return 0;
       }
