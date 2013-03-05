@@ -25,9 +25,9 @@
     h1, h2, p, th, td {
       padding: 0;
       margin: 0;
-      font-size: 20px;
+      font-size: 25px;
       font-weight: 400;
-      line-height: 22px;
+      line-height: 29px;
     }
     /*** Header ***/
     header {
@@ -81,16 +81,17 @@
       padding-right: 16px;
     }
     .alert .project-names {
-      font-size: 26px;
+      font-size: 35px;
+      line-height: 1.1;
     }
 
     /*** Project List ***/
     .project-list {
-      -moz-columns: 4;
+      -moz-columns: 2;
       -moz-column-gap: 13px;
-      -webkit-columns: 4;
+      -webkit-columns: 2;
       -webkit-column-gap: 13px;
-      columns: 4;
+      columns: 2;
       column-gap: 13px;
       padding: 13px;
       position: relative;
@@ -104,7 +105,7 @@
     }
     .project span {
       display: inline-block;
-      padding: 3px 0 5px;
+      padding: 4px 0 3px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -113,8 +114,8 @@
       width: 76%;
     }
     .project .built {
-      width: 24%;
-      padding: 5px 0px 3px;
+      width: 15%;
+      padding: 7px 0 0;
       text-transform: uppercase;
       letter-spacing: 0.125em;
       word-spacing: 0.25em;
@@ -172,7 +173,15 @@
       -webkit-animation-direction: alternate;
       -webkit-animation-iteration-count: infinite;
     }
-
+    .project svg {
+      float: right;
+      margin-top: 6px;
+      width: 24px;
+      height: 24px;
+    }
+    .project svg .progress {
+      fill: #ffbf47;
+    }
     iframe {
       position: absolute;
       left: -9999em;

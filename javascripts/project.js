@@ -52,6 +52,18 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
         return '-';
       }
     },
+    getProjectedPercentOfCurrentBuild: function(){
+      var lastBuild = this.original.lastCompletedBuild,
+          currentBuild = this.original.lastBuild,
+          percent;
+
+      if(currentBuild && !currentBuild.result){
+        percent = (Date.now() - currentBuild.timestamp) / lastBuild.duration;
+        return percent < 1 ? percent : 1;
+      } else {
+        return 0;
+      }
+    },
     getAgeClass: function(){
       var lastBuild = this.getLastBuildTime(),
           today = new Date();
@@ -85,6 +97,15 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
       }
       return '&nbsp;';
     },
+    getPercentDone: function(){
+      var radius = 12,
+          degrees = 360 * this.getProjectedPercentOfCurrentBuild(),
+          y = -Math.cos((degrees/180)*Math.PI)*radius,
+          x = Math.sin((degrees/180)*Math.PI)*radius,
+          mid = (degrees < 180) ? '0,1' : '1,1',
+          d = "M"+radius+","+radius+" v -"+radius+" A"+radius+","+radius+" 1 "+mid+" " + (x+radius) + "," + (y+radius) + " z";
+      return d;
+    },
     getClass: function(){
       return 'project '+ this.getStatus() +' '+ this.getQueueClass()
             + (this.hiding ? ' hidden' : '') + this.getAgeClass();
@@ -93,6 +114,7 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
       return '<p id="'+ this.id +'" class="'+ this.getClass() +'">'
               + '<span class="built">'+ this.getTimeSinceLastBuild() +'</span>'
               + '<span class="name">'+ this.name +'</span>'
+              + '<svg><path class="progress"></path></svg>'
             + '</p>';
     },
     update: function(data){
@@ -102,7 +124,8 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
       var el = document.getElementById(this.id);
       if(el){
         el.setAttribute('class', this.getClass());
-        el.getElementsByClassName('built')[0].innerHTML = this.getTimeSinceLastBuild()
+        el.getElementsByClassName('built')[0].innerHTML = this.getTimeSinceLastBuild();
+        el.getElementsByClassName('progress')[0].setAttribute('d', this.getPercentDone());
       }
     },
     show: function(){
@@ -134,7 +157,7 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
   Project.findByStatus = function(status){
     var i, _i, out = [];
     for(i=0,_i=projects.length; i<_i; i++){
-      if(projects[i].getStatus() === status){
+      if(projects[i].getStatus() === status && projects[i].hiding === false){
         out.push(projects[i]);
       }
     }

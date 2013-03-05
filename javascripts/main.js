@@ -40,10 +40,10 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
     var failed = jenkinsDash.Project.findByStatus('failure'),
         unstable = jenkinsDash.Project.findByStatus('unstable');
 
+    jenkinsDash.Project.syncVisible(visibleProjects);
+
     manager.showAlert('failure', failed);
     manager.showAlert('unstable', unstable);
-
-    jenkinsDash.Project.syncVisible(visibleProjects);
   };
   manager.showAlert = function(type, projects){
     var alert = jenkinsDash.Project.findByStatus(type),
@@ -73,7 +73,7 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
 
   manager.fetch = function(){
     var auth = btoa(jenkinsDash.settings.user +':'+ jenkinsDash.settings.pass),
-        url = jenkinsDash.settings.host + '/api/json?tree=views[name,jobs[name,lastCompletedBuild[result,duration,timestamp],lastBuild[result],healthReport[description,score],inQueue,buildable,color]]',
+        url = jenkinsDash.settings.host + '/api/json?tree=views[name,jobs[name,lastCompletedBuild[result,duration,timestamp],lastBuild[result,timestamp],healthReport[description,score],inQueue,buildable,color]]',
         request = new XMLHttpRequest();
 
     request.onreadystatechange = function(){
