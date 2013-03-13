@@ -2,45 +2,32 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
 
 (function(jenkinsDash){
   var manager = {};
-  manager.view = jenkinsDash.settings.view || 'All';
+  manager.callbackCount = 0;
 
-  manager.update = function(data){
+  manager.update = function(data, settings){
     var job, i, _i, j, _j,
-        newProjects = false,
-        visibleProjects = [];
-
-    if(data.views.length === 0){
-      manager.stop();
-      window.setTimeout(function(){
-        manager.login();
-        manager.start();
-      }, 10e3);
-    }
+        projectCount = jenkinsDash.Project.count();
 
     for(i=0, _i=data.views.length; i<_i; i++){
-      for(j=0, _j=data.views[i].jobs.length; j<_j; j++){
-        job = jenkinsDash.Project.find(data.views[i].jobs[j]);
-        if(job === false){
-          job = new jenkinsDash.Project(data.views[i].jobs[j]);
-          newProjects = true;
-        } else {
-          job.update(data.views[i].jobs[j]);
-        }
-        if(data.views[i].name === manager.view){
-          visibleProjects.push(job);
+      if(data.views[i].name === settings.view){
+        for(j=0, _j=data.views[i].jobs.length; j<_j; j++){
+          job = jenkinsDash.Project.find(settings, data.views[i].jobs[j]);
+          if(job === false){
+            job = new jenkinsDash.Project(settings, data.views[i].jobs[j]);
+          } else {
+            job.update(data.views[i].jobs[j]);
+          }
         }
       }
     }
-    if(newProjects){
+    if(jenkinsDash.Project.count() !== projectCount){
       manager.redraw();
     }
-    manager.refresh(visibleProjects);
+    manager.refresh();
   };
-  manager.refresh = function(visibleProjects){
+  manager.refresh = function(){
     var failed = jenkinsDash.Project.findByStatus('failure'),
         unstable = jenkinsDash.Project.findByStatus('unstable');
-
-    jenkinsDash.Project.syncVisible(visibleProjects);
 
     manager.showAlert('failure', failed);
     manager.showAlert('unstable', unstable);
@@ -72,23 +59,32 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
   };
 
   manager.fetch = function(){
-    var auth = btoa(jenkinsDash.settings.user +':'+ jenkinsDash.settings.pass),
-        url = jenkinsDash.settings.host + '/api/json?tree=views[name,jobs[name,lastCompletedBuild[result,duration,timestamp],lastBuild[result,timestamp],healthReport[description,score],inQueue,buildable,color]]',
-        request = new XMLHttpRequest();
+    jenkinsDash.settings.forEach(function(settings){
+      var auth = btoa(settings.user +':'+ settings.pass),
+          url = settings.host + '/api/json?tree=views[name,jobs[name,lastCompletedBuild[result,duration,timestamp],lastBuild[result,timestamp],lastSuccessfulBuild[duration],healthReport[description,score],inQueue,buildable,color]]',
+          request = new XMLHttpRequest();
 
-    request.onreadystatechange = function(){
-      if (request.readyState === 4 && request.status === 200) {
-        manager.update(JSON.parse(request.responseText));
-        manager.timer(5e3);
-        manager.interval = window.setTimeout(manager.fetch, 5e3);
+      request.onreadystatechange = function(){
+        if (request.readyState === 4 && request.status === 200) {
+          manager.update(JSON.parse(request.responseText), settings);
+          manager.createInterval();
+        }
       }
-    }
 
-    request.open('GET', url);
-    request.setRequestHeader('Authorization', 'Basic '+ btoa('ccdash:_ccdash_'))
-    request.send();
+      request.open('GET', url);
+      request.setRequestHeader('Authorization', 'Basic '+ auth)
+      request.send();
+    });
   };
 
+  manager.createInterval = function(){
+    manager.callbackCount = manager.callbackCount + 1;
+    if(manager.callbackCount === jenkinsDash.settings.length){
+      manager.callbackCount = 0;
+      manager.timer(5e3);
+      manager.interval = window.setTimeout(manager.fetch, 5e3);
+    }
+  },
   manager.timer = function(duration){
     var loader = document.getElementById("refresh-timer"),
         end = Date.now() + duration,

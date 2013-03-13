@@ -3,9 +3,9 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
 (function(jenkinsDash){
   var projects = [],
       projectsByName = {},
-      Project = function(options){
-        this.id = getId(options.name);
-        this.name = options.name;
+      Project = function(settings, options){
+        this.id = getId(settings.name + '-' + options.name);
+        this.name = settings.name + '_' + options.name;
         this.hiding = false;
 
         this.original = options;
@@ -53,7 +53,7 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
       }
     },
     getProjectedPercentOfCurrentBuild: function(){
-      var lastBuild = this.original.lastCompletedBuild,
+      var lastBuild = this.original.lastSuccessfulBuild,
           currentBuild = this.original.lastBuild,
           percent;
 
@@ -147,10 +147,10 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
   Project.count = function(){
     return projects.length;
   }
-  Project.find = function(obj){
+  Project.find = function(settings, obj){
     var name = typeof obj === 'object' ? obj.name : obj;
-    if(typeof projectsByName[name] !== 'undefined'){
-      return projectsByName[name];
+    if(typeof projectsByName[settings.name + '_' + name] !== 'undefined'){
+      return projectsByName[settings.name + '_' + name];
     }
     return false;
   };
@@ -172,17 +172,6 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
     }
     return out;
   };
-  Project.syncVisible = function(visible){
-    var visibleIds = visible.map(function(p){ return p.id; });
-    projects.forEach(function(project){
-      if(visibleIds.indexOf(project.id) > -1){
-        project.show();
-      } else {
-        project.hide();
-      }
-    });
-  };
-
 
 
   // Helper Methods
