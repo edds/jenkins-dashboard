@@ -59,6 +59,7 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
   };
 
   manager.fetch = function(){
+    manager.interval = false;
     jenkinsDash.settings.forEach(function(settings){
       var auth = btoa(settings.user +':'+ settings.pass),
           url = settings.host + '/api/json?tree=views[name,jobs[name,lastCompletedBuild[result,duration,timestamp],lastBuild[result,timestamp],lastSuccessfulBuild[duration],healthReport[description,score],inQueue,buildable,color]]',
@@ -95,7 +96,9 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
       if(typeof success === 'undefined' || success){
         manager.timer(5e3);
       }
-      manager.interval = window.setTimeout(manager.fetch, 5e3);
+      if(!manager.interval){
+        manager.interval = window.setTimeout(manager.fetch, 5e3);
+      }
     }
   },
   manager.timer = function(duration){
