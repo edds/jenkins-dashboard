@@ -65,23 +65,36 @@ if(typeof window.jenkinsDash === 'undefined') window.jenkinsDash = {};
           request = new XMLHttpRequest();
 
       request.onreadystatechange = function(){
-        if (request.readyState === 4 && request.status === 200) {
-          manager.update(JSON.parse(request.responseText), settings);
-          manager.createInterval();
+        if (request.readyState === 4) {
+          if(request.status === 200){
+            manager.update(JSON.parse(request.responseText), settings);
+            manager.createInterval();
+          } else {
+            manager.createInterval(false);
+          }
         }
+      }
+      request.ontimeout = function(){
+        manager.createInterval(false);
+      }
+      request.onerror = function(){
+        manager.createInterval(false);
       }
 
       request.open('GET', url);
       request.setRequestHeader('Authorization', 'Basic '+ auth)
+      request.timeout = 5e3;
       request.send();
     });
   };
 
-  manager.createInterval = function(){
+  manager.createInterval = function(success){
     manager.callbackCount = manager.callbackCount + 1;
     if(manager.callbackCount === jenkinsDash.settings.length){
       manager.callbackCount = 0;
-      manager.timer(5e3);
+      if(typeof success === 'undefined' || success){
+        manager.timer(5e3);
+      }
       manager.interval = window.setTimeout(manager.fetch, 5e3);
     }
   },
